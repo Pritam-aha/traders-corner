@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Stock Market - Live Index Prices</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-main">
+                    <div class="logo-section">
+                        <div class="logo">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="title-section">
+                            <h1>Indian Stock Market</h1>
+                            <p class="subtitle">Live Index Prices & Market Data</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <div class="market-time">
+                            <i class="fas fa-clock"></i>
+                            <span id="currentTime">--</span>
+                        </div>
+                        <button id="refreshBtn" class="refresh-btn">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="last-updated">
+                    <span id="lastUpdated">Last Updated: --</span>
+                    <div class="connection-status">
+                        <span class="status-dot" id="connectionStatus"></span>
+                        <span class="status-text">Connected</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="market-overview">
+                <div class="section-header">
+                    <h2><i class="fas fa-trending-up"></i> Market Overview</h2>
+                    <p class="section-subtitle">Major Indian Stock Market Indexes</p>
+                </div>
+                <div class="overview-cards">
+                    <div class="overview-card featured">
+                        <div class="card-header">
+                            <div class="index-info">
+                                <div class="index-logo nifty-logo">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="index-details">
+                                    <h3>NIFTY 50</h3>
+                                    <span class="index-description">NSE's Premier Index</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="price-section">
+                                <div class="price" id="nsei-price">--</div>
+                                <div class="price-label">Current Price (₹)</div>
+                            </div>
+                            <div class="change-section">
+                                <div class="change" id="nsei-change">--</div>
+                                <div class="change-label">Today's Change</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="market-cap">
+                                <span>Market Cap:</span>
+                                <strong>₹2,500,000 Cr</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card featured">
+                        <div class="card-header">
+                            <div class="index-info">
+                                <div class="index-logo sensex-logo">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="index-details">
+                                    <h3>SENSEX</h3>
+                                    <span class="index-description">BSE's Benchmark</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="price-section">
+                                <div class="price" id="bsesn-price">--</div>
+                                <div class="price-label">Current Price (₹)</div>
+                            </div>
+                            <div class="change-section">
+                                <div class="change" id="bsesn-change">--</div>
+                                <div class="change-label">Today's Change</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="market-cap">
+                                <span>Market Cap:</span>
+                                <strong>₹3,200,000 Cr</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overview-card featured">
+                        <div class="card-header">
+                            <div class="index-info">
+                                <div class="index-logo bank-logo">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="index-details">
+                                    <h3>BANK NIFTY</h3>
+                                    <span class="index-description">Banking Sector</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <i class="fas fa-star"></i>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                        <div class="card-content">
+                            <div class="price-section">
+                                <div class="price" id="nsebank-price">--</div>
+                                <div class="price-label">Current Price (₹)</div>
+                            </div>
+                            <div class="change-section">
+                                <div class="change" id="nsebank-change">--</div>
+                                <div class="change-label">Today's Change</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="market-cap">
+                                <span>Market Cap:</span>
+                                <strong>₹1,800,000 Cr</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="indexes-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> All Indian Indexes</h2>
+                    <p class="section-subtitle">Complete list of NSE and BSE indexes</p>
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="major">Major</button>
+                    <button class="filter-btn" data-filter="sector">Sector</button>
+                    <button class="filter-btn" data-filter="gainers">Top Gainers</button>
+                    <button class="filter-btn" data-filter="losers">Top Losers</button>
+                </div>
+                <div class="indexes-grid" id="indexesGrid">
+                    <!-- Indexes will be populated here -->
+                </div>
+            </div>
+
+            <div class="market-status">
+                <div class="status-card">
+                    <div class="status-header">
+                        <h3><i class="fas fa-info-circle"></i> Market Status</h3>
+                    </div>
+                    <div class="status-content">
+                        <div class="status-indicator" id="marketStatus">
+                            <span class="status-dot"></span>
+                            <span class="status-text">Loading...</span>
+                        </div>
+                        <div class="market-hours">
+                            <div class="hours-info">
+                                <span class="label">Trading Hours:</span>
+                                <span class="value">9:15 AM - 3:30 PM (IST)</span>
+                            </div>
+                            <div class="next-session">
+                                <span class="label">Next Session:</span>
+                                <span class="value" id="nextSession">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="statistics-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> Market Statistics</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="gainersCount">--</div>
+                            <div class="stat-label">Advancing</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="losersCount">--</div>
+                            <div class="stat-label">Declining</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-minus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="unchangedCount">--</div>
+                            <div class="stat-label">Unchanged</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="avgChange">--</div>
+                            <div class="stat-label">Avg Change</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Indian Stock Market Tracker</h4>
+                    <p>Real-time market data and analysis for Indian stock market indexes.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#nifty">NIFTY 50</a></li>
+                        <li><a href="#sensex">SENSEX</a></li>
+                        <li><a href="#banknifty">BANK NIFTY</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Disclaimer</h4>
+                    <p>Data provided for informational purposes only. Not financial advice.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Indian Stock Market Tracker. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading market data...</p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

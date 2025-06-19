@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Data Test - Indian Stock Market</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-card {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .change {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .positive { color: #28a745; }
+        .negative { color: #dc3545; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Real Stock Data Test</h1>
+    
+    <div class="test-card">
+        <h2>Test Results</h2>
+        <div id="testResults">
+            <p>Click "Test Real Data" to check if live stock data is working...</p>
+        </div>
+        <button onclick="testRealData()">Test Real Data</button>
+        <button onclick="testYahooFinance()">Test Yahoo Finance</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div class="test-card">
+        <h2>Expected Results</h2>
+        <ul>
+            <li><strong>NIFTY 50 (^NSEI):</strong> Should show around ₹21,000 - ₹23,000</li>
+            <li><strong>SENSEX (^BSESN):</strong> Should show around ₹70,000 - ₹75,000</li>
+            <li><strong>BANK NIFTY (^NSEBANK):</strong> Should show around ₹45,000 - ₹50,000</li>
+        </ul>
+        <p><em>If you see these ranges, real data is working! If you see different values, it's simulated data.</em></p>
+    </div>
+
+    <script>
+        async function testRealData() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div class="status warning">Testing real data...</div>';
+            
+            try {
+                // Test Yahoo Finance API
+                const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI?interval=1d&range=1d');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.chart || !data.chart.result || !data.chart.result[0]) {
+                    throw new Error('Invalid data structure from Yahoo Finance');
+                }
+                
+                const result = data.chart.result[0];
+                const meta = result.meta;
+                
+                if (!meta || !meta.regularMarketPrice) {
+                    throw new Error('No price data available');
+                }
+                
+                const currentPrice = meta.regularMarketPrice;
+                const previousClose = meta.previousClose || currentPrice;
+                const change = currentPrice - previousClose;
+                const changePercent = (change / previousClose) * 100;
+                
+                resultsDiv.innerHTML = `
+                    <div class="status success">✅ Real data working!</div>
+                    <div class="price">NIFTY 50: ₹${currentPrice.toFixed(2)}</div>
+                    <div class="change ${change >= 0 ? 'positive' : 'negative'}">
+                        ${change >= 0 ? '+' : ''}${change.toFixed(2)} (${changePercent.toFixed(2)}%)
+                    </div>
+                    <p><strong>Data Source:</strong> Yahoo Finance API</p>
+                    <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="status error">❌ Real data failed: ${error.message}</div>
+                    <p>This means the website will use simulated data instead.</p>
+                    <p><strong>Possible reasons:</strong></p>
+                    <ul>
+                        <li>Network connectivity issues</li>
+                        <li>CORS restrictions</li>
+                        <li>API rate limiting</li>
+                        <li>Yahoo Finance service down</li>
+                    </ul>
+                `;
+            }
+        }
+        
+        async function testYahooFinance() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = '<div class="status warning">Testing Yahoo Finance API...</div>';
+            
+            const symbols = ['^NSEI', '^BSESN', '^NSEBANK'];
+            let results = [];
+            
+            for (const symbol of symbols) {
+                try {
+                    const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const meta = data.chart?.result?.[0]?.meta;
+                        
+                        if (meta && meta.regularMarketPrice) {
+                            results.push({
+                                symbol: symbol,
+                                price: meta.regularMarketPrice,
+                                success: true
+                            });
+                        } else {
+                            results.push({
+                                symbol: symbol,
+                                success: false,
+                                error: 'No price data'
+                            });
+                        }
+                    } else {
+                        results.push({
+                            symbol: symbol,
+                            success: false,
+                            error: `HTTP ${response.status}`
+                        });
+                    }
+                } catch (error) {
+                    results.push({
+                        symbol: symbol,
+                        success: false,
+                        error: error.message
+                    });
+                }
+            }
+            
+            const successCount = results.filter(r => r.success).length;
+            const totalCount = results.length;
+            
+            let html = `<div class="status ${successCount > 0 ? 'success' : 'error'}">
+                ${successCount > 0 ? '✅' : '❌'} Yahoo Finance Test: ${successCount}/${totalCount} successful
+            </div>`;
+            
+            results.forEach(result => {
+                if (result.success) {
+                    html += `<div class="price">${result.symbol}: ₹${result.price.toFixed(2)}</div>`;
+                } else {
+                    html += `<div class="change negative">${result.symbol}: Failed - ${result.error}</div>`;
+                }
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = 
+                '<p>Click "Test Real Data" to check if live stock data is working...</p>';
+        }
+        
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            setTimeout(testRealData, 1000);
+        });
+    </script>
+</body>
+</html> 
