@@ -10,6 +10,9 @@
   padding: 20px 0;
   min-height: calc(100vh - 200px); /* Account for header and footer */
   padding-bottom: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Tab Navigation */
@@ -127,7 +130,82 @@
   font-size: 18px;
 }
 
-/* Responsive Design */
+/* Bottom Section */
+.bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+  .main-content {
+    padding: 30px 0;
+  }
+  
+  .tab-navigation {
+    margin-bottom: 40px;
+    padding: 15px;
+  }
+  
+  .tab-button {
+    padding: 15px 25px;
+    font-size: 15px;
+  }
+  
+  .tab-button i {
+    font-size: 18px;
+  }
+  
+  .bottom-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+/* Desktop */
+@media (max-width: 1399px) and (min-width: 1025px) {
+  .main-content {
+    padding: 25px 0;
+  }
+  
+  .tab-navigation {
+    margin-bottom: 35px;
+  }
+  
+  .bottom-section {
+    gap: 25px;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 20px 0;
+  }
+  
+  .tab-navigation {
+    margin-bottom: 25px;
+    padding: 8px;
+  }
+  
+  .tab-button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .tab-button i {
+    font-size: 15px;
+  }
+  
+  .bottom-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .App {
     padding-bottom: 100px; /* More space for mobile nav */
@@ -171,8 +249,14 @@
   .loading-container p {
     font-size: 14px;
   }
+  
+  .bottom-section {
+    gap: 15px;
+    margin-top: 20px;
+  }
 }
 
+/* Small Mobile Responsive */
 @media (max-width: 480px) {
   .App {
     padding-bottom: 90px;
@@ -219,6 +303,52 @@
   .loading-container p {
     font-size: 13px;
   }
+  
+  .bottom-section {
+    gap: 12px;
+    margin-top: 15px;
+  }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+  .App {
+    padding-bottom: 85px;
+  }
+  
+  .main-content {
+    padding: 8px 0;
+  }
+  
+  .mobile-nav-tab {
+    padding: 5px 6px;
+    font-size: 10px;
+    min-height: 36px;
+  }
+  
+  .mobile-nav-tab i {
+    font-size: 14px;
+  }
+  
+  .loading-container {
+    min-height: 45vh;
+    padding: 10px;
+  }
+  
+  .loading-container .loading-spinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+  }
+  
+  .loading-container p {
+    font-size: 12px;
+  }
+  
+  .bottom-section {
+    gap: 10px;
+    margin-top: 12px;
+  }
 }
 
 /* Landscape mobile optimizations */
@@ -239,12 +369,28 @@
     padding: 4px 8px;
     min-height: 36px;
   }
+  
+  .bottom-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
 }
 
 /* Safe area support for notched devices */
 @supports (padding: max(0px)) {
   .mobile-nav-bar {
     padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .tab-navigation {
+    border-width: 0.5px;
+  }
+  
+  .mobile-nav-bar {
+    border-top-width: 0.5px;
   }
 }
 

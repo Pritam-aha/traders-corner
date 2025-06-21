@@ -20,16 +20,16 @@ const Footer = () => {
               market analysis and professional insights.
             </p>
             <div className="social-links">
-              <a href="#" className="social-link">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <i className="fab fa-facebook"></i>
               </a>
-              <a href="#" className="social-link">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="#" className="social-link">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <i className="fab fa-linkedin"></i>
               </a>
-              <a href="#" className="social-link">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <i className="fab fa-instagram"></i>
               </a>
             </div>
@@ -93,9 +93,9 @@ const Footer = () => {
               <p>&copy; {currentYear} Indian Stock Market Tracker. All rights reserved.</p>
             </div>
             <div className="footer-bottom-links">
-              <a href="#privacy">Privacy Policy</a>
-              <a href="#terms">Terms of Service</a>
-              <a href="#disclaimer">Disclaimer</a>
+              <a href="/privacy-policy">Privacy Policy</a>
+              <a href="/terms-of-service">Terms of Service</a>
+              <a href="/disclaimer">Disclaimer</a>
             </div>
           </div>
         </div>

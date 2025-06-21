@@ -2,11 +2,12 @@
   "name": "indian-stock-market-tracker",
   "version": "1.0.0",
   "description": "A modern, responsive website that displays current stock prices for all major Indian stock market indexes in real-time.",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "python -m http.server 8000",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "serve": "npx http-server -p 8000",
-    "dev": "cd client && npm start"
+    "client": "cd client && npm start"
   },
   "keywords": [
     "stock-market",

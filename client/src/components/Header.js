@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ onViewChange, onRefresh, currentView }) => {
   const currentTime = new Date().toLocaleTimeString('en-IN', {
     timeZone: 'Asia/Kolkata',
     hour12: false,
@@ -34,7 +34,21 @@ const Header = () => {
           </div>
           
           <div className="header-right">
-            <div className="market-status">
+            <div className="view-toggle">
+              <button 
+                className={`toggle-btn ${currentView === 'overview' ? 'active' : ''}`}
+                onClick={() => onViewChange('overview')}
+              >
+                Dashboard
+              </button>
+              <button 
+                className={`toggle-btn ${currentView === 'about' ? 'active' : ''}`}
+                onClick={() => onViewChange('about')}
+              >
+                About Us
+              </button>
+            </div>
+            <div className="market-status-container">
               <div className="status-indicator">
                 <div className="status-dot"></div>
                 <span>Live</span>

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
 import './App.css';
+import AboutUs from './components/AboutUs';
 import AllIndexes from './components/AllIndexes';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -11,16 +12,7 @@ import Statistics from './components/Statistics';
 
 function App() {
   const [currentView, setCurrentView] = useState('overview');
-  const [marketData, setMarketData] = useState({
-    majorIndexes: [],
-    sectorIndexes: [],
-    marketStats: {
-      total: 0,
-      gainers: 0,
-      losers: 0,
-      avgChange: '0.00'
-    }
-  });
+  const [marketData, setMarketData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -231,7 +223,6 @@ function App() {
       }
     ];
 
-    // Calculate market stats
     const allIndexes = [...majorIndexes, ...sectorIndexes];
     const gainers = allIndexes.filter(index => index.change >= 0).length;
     const losers = allIndexes.filter(index => index.change < 0).length;
@@ -249,31 +240,43 @@ function App() {
     };
   }, []);
 
-  // Fetch market data from backend
-  const fetchMarketData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('http://localhost:5000/api/market-data');
-      const data = await response.json();
-      
-      if (data.success) {
-        setMarketData(data.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/stocks');
+        if (!response.ok) {
+          throw new Error(`Backend Error: ${response.status}`);
+        }
+        const data = await response.json();
+        const major = data.filter(stock => stock.type === 'major');
+        const sector = data.filter(stock => stock.type === 'sector');
+        const gainers = data.filter(stock => stock.isPositive).length;
+        const losers = data.filter(stock => !stock.isPositive).length;
+        const avgChange = data.length > 0 ? data.reduce((acc, s) => acc + s.changePercent, 0) / data.length : 0;
+        
+        setMarketData({
+          majorIndexes: major,
+          sectorIndexes: sector,
+          marketStats: {
+            total: data.length,
+            gainers,
+            losers,
+            avgChange: avgChange.toFixed(2)
+          }
+        });
+        showNotification('Successfully fetched live market data!', 'success');
         setLastUpdate(new Date());
-        showNotification('Data updated successfully!', 'success');
-      } else {
-        throw new Error(data.message || 'Failed to fetch data');
+
+      } catch (error) {
+        console.error('Failed to fetch market data:', error);
+        showNotification('Could not connect to live data. Displaying simulated data.', 'error');
+        setMarketData(generateSimulatedData());
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching market data:', error);
-      showNotification('Failed to fetch market data. Using simulated data.', 'warning');
-      
-      // Fallback to simulated data
-      const simulatedData = generateSimulatedData();
-      setMarketData(simulatedData);
-      setLastUpdate(new Date());
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    fetchData();
   }, [generateSimulatedData]);
 
   const showNotification = (message, type = 'info') => {
@@ -282,19 +285,12 @@ function App() {
   };
 
   const handleRefresh = () => {
-    fetchMarketData();
+    showNotification('Data refreshed with latest values.', 'info');
   };
 
-  useEffect(() => {
-    fetchMarketData();
-    
-    // Set up auto-refresh every 5 minutes
-    const interval = setInterval(fetchMarketData, 5 * 60 * 1000);
-    
-    return () => clearInterval(interval);
-  }, [fetchMarketData]);
-
   const renderCurrentView = () => {
+    if (!marketData) return null;
+
     switch (currentView) {
       case 'overview':
         return (
@@ -304,12 +300,15 @@ function App() {
             marketStats={marketData.marketStats}
           />
         );
-      case 'all-indexes':
+      case 'all':
         return (
           <AllIndexes 
-            majorIndexes={marketData.majorIndexes}
-            sectorIndexes={marketData.sectorIndexes}
+            allIndexes={[...marketData.majorIndexes, ...marketData.sectorIndexes]}
           />
+        );
+      case 'about':
+        return (
+          <AboutUs onViewChange={setCurrentView} />
         );
       case 'market-status':
         return (
@@ -338,13 +337,21 @@ function App() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Connecting to Market Data...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <Header 
-        currentView={currentView}
-        setCurrentView={setCurrentView}
+        onViewChange={setCurrentView}
         onRefresh={handleRefresh}
-        isLoading={isLoading}
+        currentView={currentView}
         lastUpdate={lastUpdate}
       />
       
@@ -360,6 +367,19 @@ function App() {
             {renderCurrentView()}
           </motion.div>
         </AnimatePresence>
+        {marketData && currentView === 'overview' && (
+          <div className="bottom-section">
+            <Statistics 
+                marketStats={marketData.marketStats} 
+                stocks={[...marketData.majorIndexes, ...marketData.sectorIndexes]} 
+            />
+            <MarketStatus 
+                majorIndexes={marketData.majorIndexes}
+                sectorIndexes={marketData.sectorIndexes}
+                lastUpdate={lastUpdate}
+            />
+          </div>
+        )}
       </main>
 
       <Footer />

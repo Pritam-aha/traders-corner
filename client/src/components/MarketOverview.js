@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useState } from 'react';
 import './MarketOverview.css';
 import StockCard from './StockCard';
+import StockGraph from './StockGraph';
 
 const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
+  const [selectedStock, setSelectedStock] = useState(null);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -23,6 +26,14 @@ const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
         duration: 0.5
       }
     }
+  };
+
+  const handleStockClick = (stock) => {
+    setSelectedStock(stock);
+  };
+
+  const handleCloseGraph = () => {
+    setSelectedStock(null);
   };
 
   return (
@@ -91,7 +102,7 @@ const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
             <i className="fas fa-star"></i>
             Major Indexes
           </h2>
-          <p>Key market indicators</p>
+          <p>Key market indicators - Click any card to view detailed chart</p>
         </div>
         
         <motion.div 
@@ -106,6 +117,7 @@ const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
               stock={stock} 
               index={index}
               isMajor={true}
+              onClick={handleStockClick}
             />
           ))}
         </motion.div>
@@ -123,7 +135,7 @@ const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
             <i className="fas fa-industry"></i>
             Sector Indexes
           </h2>
-          <p>All sectoral performance indicators</p>
+          <p>All sectoral performance indicators - Click any card to view detailed chart</p>
         </div>
         
         <motion.div 
@@ -138,10 +150,19 @@ const MarketOverview = ({ majorIndexes, sectorIndexes, marketStats }) => {
               stock={stock} 
               index={index}
               isMajor={false}
+              onClick={handleStockClick}
             />
           ))}
         </motion.div>
       </motion.div>
+
+      {/* Stock Graph Modal */}
+      {selectedStock && (
+        <StockGraph 
+          stock={selectedStock} 
+          onClose={handleCloseGraph}
+        />
+      )}
     </div>
   );
 };

@@ -202,21 +202,52 @@
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.05;
-  z-index: -1;
+  opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .card-bg-gradient.success {
-  background: linear-gradient(135deg, #28a745, #20c997);
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(30, 126, 52, 0.02) 100%);
 }
 
 .card-bg-gradient.danger {
-  background: linear-gradient(135deg, #dc3545, #fd7e14);
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(200, 35, 51, 0.02) 100%);
 }
 
 .stock-card:hover .card-bg-gradient {
-  opacity: 0.1;
+  opacity: 1;
+}
+
+/* Click indicator */
+.click-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.stock-card:hover .click-indicator {
+  opacity: 1;
+}
+
+.click-indicator i {
+  font-size: 14px;
 }
 
 /* Mobile Responsive */
@@ -234,8 +265,7 @@
   .stock-logo {
     width: 40px;
     height: 40px;
-    font-size: 16px;
-    border-radius: 10px;
+    font-size: 18px;
   }
 
   .stock-name {
@@ -251,7 +281,7 @@
   }
 
   .change-amount {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .change-percent {
@@ -271,58 +301,26 @@
     padding: 1px 4px;
     font-size: 9px;
   }
+  
+  .click-indicator {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .click-indicator i {
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
   .stock-card {
-    padding: 14px;
-  }
-
-  .stock-logo {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
-  }
-
-  .stock-name {
-    font-size: 13px;
-  }
-
-  .price {
-    font-size: 18px;
-  }
-
-  .change-amount {
-    font-size: 12px;
-  }
-
-  .price-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .change-section {
-    align-items: flex-start;
-    text-align: left;
-  }
-}
-
-/* Landscape mobile optimizations */
-@media (max-width: 768px) and (orientation: landscape) {
-  .stock-card {
     padding: 12px;
   }
 
-  .card-header {
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
   .stock-logo {
     width: 36px;
     height: 36px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .stock-name {
@@ -336,6 +334,56 @@
   .change-amount {
     font-size: 11px;
   }
+
+  .price-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .change-section {
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  .click-indicator {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  
+  .click-indicator i {
+    font-size: 11px;
+  }
+}
+
+/* Landscape mobile optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+  .stock-card {
+    padding: 14px;
+  }
+
+  .card-header {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .stock-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .stock-name {
+    font-size: 12px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .change-amount {
+    font-size: 10px;
+  }
 }
 
 /* High contrast mode support */
@@ -345,7 +393,7 @@
   }
 
   .type-badge {
-    border-width: 2px;
+    border: 1px solid currentColor;
   }
 }
 

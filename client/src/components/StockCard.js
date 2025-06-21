@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import './StockCard.css';
 
-const StockCard = ({ stock, index, isMajor }) => {
+const StockCard = ({ stock, index, isMajor, onClick }) => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
       minimumFractionDigits: 2,
@@ -50,6 +50,12 @@ const StockCard = ({ stock, index, isMajor }) => {
   const changeIcon = isPositive ? 'arrow-up' : 'arrow-down';
   const changePrefix = isPositive ? '+' : '-';
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick(stock);
+    }
+  };
+
   return (
     <motion.div
       className={`stock-card ${isMajor ? 'major' : 'sector'} ${isPositive ? 'positive' : 'negative'}`}
@@ -71,6 +77,8 @@ const StockCard = ({ stock, index, isMajor }) => {
         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)'
       }}
       transition={{ duration: 0.3 }}
+      onClick={handleClick}
+      style={{ cursor: 'pointer' }}
     >
       <div className="card-header">
         <div className="stock-logo">
@@ -117,6 +125,12 @@ const StockCard = ({ stock, index, isMajor }) => {
 
       {/* Animated background gradient */}
       <div className={`card-bg-gradient ${changeColor}`}></div>
+      
+      {/* Click indicator */}
+      <div className="click-indicator">
+        <i className="fas fa-chart-line"></i>
+        <span>Click to view chart</span>
+      </div>
     </motion.div>
   );
 };
