@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "serve": "npx http-server -p 8000",
     "client": "cd client && npm start"
   },
   "keywords": [
