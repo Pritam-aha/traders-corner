@@ -1,8 +1,9 @@
-import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useRef } from 'react';
 import './StockCard.css';
 
-const StockCard = ({ stock, index, isMajor, onClick }) => {
+const StockCard = ({ stock, index, isMajor }) => {
+  const cardRef = useRef(null);
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
       minimumFractionDigits: 2,
@@ -50,35 +51,13 @@ const StockCard = ({ stock, index, isMajor, onClick }) => {
   const changeIcon = isPositive ? 'arrow-up' : 'arrow-down';
   const changePrefix = isPositive ? '+' : '-';
 
-  const handleClick = () => {
-    if (onClick) {
-      onClick(stock);
-    }
-  };
-
   return (
-    <motion.div
-      className={`stock-card ${isMajor ? 'major' : 'sector'} ${isPositive ? 'positive' : 'negative'}`}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: {
-            delay: index * 0.1,
-            duration: 0.5
-          }
-        }
-      }}
-      initial="hidden"
-      animate="visible"
-      whileHover={{ 
-        scale: 1.02,
-        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)'
-      }}
-      transition={{ duration: 0.3 }}
-      onClick={handleClick}
-      style={{ cursor: 'pointer' }}
+      <div className="stock-card-wrapper" ref={cardRef}>
+        <div
+          className={`stock-card floating-card ${isMajor ? 'major' : 'sector'} ${isPositive ? 'positive' : 'negative'}`}
+          style={{ 
+            animationDelay: `${index * 0.1}s`
+          }}
     >
       <div className="card-header">
         <div className="stock-logo">
@@ -115,23 +94,18 @@ const StockCard = ({ stock, index, isMajor, onClick }) => {
 
         <div className="card-footer">
           <div className="previous-close">
-            <span>Prev Close: ₹{formatPrice(stock.previousClose)}</span>
+                <span>Prev Close: ₹{formatPrice(stock.previousClose || stock.price)}</span>
           </div>
           <div className="data-source">
-            <span className="source-badge">{stock.source}</span>
+                <span className="source-badge">{stock.source || 'Simulated'}</span>
           </div>
         </div>
       </div>
 
       {/* Animated background gradient */}
       <div className={`card-bg-gradient ${changeColor}`}></div>
-      
-      {/* Click indicator */}
-      <div className="click-indicator">
-        <i className="fas fa-chart-line"></i>
-        <span>Click to view chart</span>
-      </div>
-    </motion.div>
+          </div>
+        </div>
   );
 };
 

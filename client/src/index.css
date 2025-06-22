@@ -139,6 +139,349 @@ code {
   }
 }
 
+/* Floating UI and Smooth Scroll Enhancements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Global floating elements */
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.slide-up {
+  animation: slide-up 0.8s ease-out;
+}
+
+.fade-in-scale {
+  animation: fade-in-scale 0.6s ease-out;
+}
+
+/* Enhanced scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed header */
+}
+
+body {
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #0f1419 0%, #1a202c 50%, #2d3748 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Parallax scrolling effect */
+.parallax-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+  transform: translateZ(0);
+}
+
+/* Floating particles effect */
+.floating-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 8s; }
+
+/* Enhanced container with floating effect */
+.main-container {
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced scroll reveal animations with multiple animation types */
+.reveal-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: blur(0);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Different animation types for variety */
+.reveal-on-scroll.slide-left {
+  transform: translateX(-60px);
+}
+
+.reveal-on-scroll.slide-left.revealed {
+  transform: translateX(0);
+}
+
+.reveal-on-scroll.slide-right {
+  transform: translateX(60px);
+}
+
+.reveal-on-scroll.slide-right.revealed {
+  transform: translateX(0);
+}
+
+.reveal-on-scroll.scale-up {
+  transform: scale(0.8) translateY(40px);
+}
+
+.reveal-on-scroll.scale-up.revealed {
+  transform: scale(1) translateY(0);
+}
+
+.reveal-on-scroll.rotate-in {
+  transform: rotate(-5deg) translateY(40px);
+}
+
+.reveal-on-scroll.rotate-in.revealed {
+  transform: rotate(0deg) translateY(0);
+}
+
+/* Staggered animations for grid items */
+.reveal-on-scroll.stagger-1 { transition-delay: 0.1s; }
+.reveal-on-scroll.stagger-2 { transition-delay: 0.2s; }
+.reveal-on-scroll.stagger-3 { transition-delay: 0.3s; }
+.reveal-on-scroll.stagger-4 { transition-delay: 0.4s; }
+.reveal-on-scroll.stagger-5 { transition-delay: 0.5s; }
+
+/* Enhanced card floating effects with scroll-based animations */
+.card-float {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  position: relative;
+}
+
+.card-float:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(102, 126, 234, 0.3),
+    0 0 30px rgba(102, 126, 234, 0.2);
+}
+
+/* Scroll-based parallax effect for background elements */
+.parallax-element {
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+/* Enhanced scroll indicator */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  width: var(--scroll-percent, 0%);
+  transition: width 0.1s ease-out;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed header */
+}
+
+/* Enhanced scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  transform: scaleX(1.2);
+}
+
+/* Scroll-triggered animations for different sections */
+.section-fade-in {
+  opacity: 1; /* Temporarily make visible by default */
+  transform: translateY(0); /* Temporarily reset transform */
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced floating animation with scroll interaction */
+.floating-enhanced {
+  animation: float-enhanced 8s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.floating-enhanced:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+}
+
+@keyframes float-enhanced {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(0.5deg);
+  }
+}
+
+/* Scroll-based color transitions */
+.scroll-color-transition {
+  transition: all 0.5s ease;
+}
+
+.scroll-color-transition.scrolled {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Enhanced mobile scroll effects */
+@media (max-width: 768px) {
+  .reveal-on-scroll {
+    transform: translateY(40px);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .card-float:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+  
+  .floating-enhanced {
+    animation: float-enhanced-mobile 6s ease-in-out infinite;
+  }
+  
+  @keyframes float-enhanced-mobile {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
 /* Mobile-first Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -230,6 +573,78 @@ code {
   .mobile-safe-area {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  /* Mobile-specific improvements */
+  body {
+    padding-top: 80px; /* Account for fixed header */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  /* Improve touch scrolling */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Better scrollbar for mobile */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  }
+
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Smooth transitions for all elements */
+  * {
+    transition: all 0.2s ease;
+  }
+
+  /* Better focus states for accessibility */
+  button:focus,
+  a:focus,
+  input:focus,
+  textarea:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+
+  /* Improve text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Mobile floating adjustments */
+  .main-container {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .floating {
+    animation: float-slow 8s ease-in-out infinite;
+  }
+
+  .card-float:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
 }
 
 @media (max-width: 480px) {
@@ -293,6 +708,17 @@ code {
     background-position: right 12px center;
     background-size: 16px;
     padding-right: 40px;
+  }
+
+  /* Extra small devices */
+  body {
+    padding-top: 70px;
+  }
+
+  .main-container {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 12px;
   }
 }
 

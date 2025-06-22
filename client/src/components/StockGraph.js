@@ -1,16 +1,17 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaChartLine, FaTimes } from 'react-icons/fa';
 import './StockGraph.css';
 
-const StockGraph = ({ stock, onClose }) => {
+const StockGraph = ({ stock, onClose, data, isInline = false, isFloating = false, showCloseButton = true }) => {
   const canvasRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [canvasReady, setCanvasReady] = useState(false);
 
   const generateMarketData = useCallback((currentPrice, changePercent) => {
     const dataPoints = [];
     const basePrice = currentPrice / (1 + changePercent / 100);
-    const totalPoints = 70; // More data points for a more detailed, jagged line
-    const volatility = Math.abs(changePercent) * 0.045 + 0.05; // Base volatility, with a floor
+    const totalPoints = 50; // Reduced for better performance
+    const volatility = Math.abs(changePercent) * 0.045 + 0.05;
     const trend = changePercent / 100;
 
     let currentValue = basePrice;
@@ -31,12 +32,12 @@ const StockGraph = ({ stock, onClose }) => {
         const sessionVolatility = volatility * currentPattern.volatility;
         const sessionMomentum = trend * currentPattern.momentumFactor * 0.1;
 
-        const randomComponent = (Math.random() - 0.48) * sessionVolatility; // Slightly biased upward
-        momentum = momentum * 0.8 + randomComponent * 0.2; // Less momentum smoothing
+        const randomComponent = (Math.random() - 0.48) * sessionVolatility;
+        momentum = momentum * 0.8 + randomComponent * 0.2;
 
         let change = sessionMomentum + momentum + randomComponent;
         
-        if (Math.random() < 0.04) { // 4% chance of a sharp move
+        if (Math.random() < 0.04) {
             change += (Math.random() - 0.5) * sessionVolatility * 4;
         }
 
@@ -63,24 +64,34 @@ const StockGraph = ({ stock, onClose }) => {
 
   const drawChart = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !stock) return;
+    if (!canvas || !stock || !canvasReady) return;
 
     const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+    if (!ctx) return;
 
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const dpr = window.devicePixelRatio || 1;
+
+    // Set canvas size accounting for device pixel ratio
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
+    
+    // Scale the context to ensure correct drawing
     ctx.scale(dpr, dpr);
     
     const width = rect.width;
     const height = rect.height;
 
+    // Clear the canvas
     ctx.clearRect(0, 0, width, height);
 
     const data = generateMarketData(stock.price, stock.changePercent);
     const isPositive = stock.change >= 0;
     const chartColor = isPositive ? '#00c853' : '#ff5252';
+
+    if (data.length < 2) return;
 
     const minY = Math.min(...data.map(d => d.y));
     const maxY = Math.max(...data.map(d => d.y));
@@ -90,9 +101,11 @@ const StockGraph = ({ stock, onClose }) => {
     const scaleX = width / (data.length - 1);
     const scaleY = height / (range + padding * 2);
 
+    // Draw the line
     ctx.strokeStyle = chartColor;
-    ctx.lineWidth = 1.5;
-    ctx.lineJoin = 'miter'; // Use miter for sharp corners
+    ctx.lineWidth = Math.max(1, Math.min(2, width / 200)); // Responsive line width
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
 
     data.forEach((point, index) => {
@@ -106,89 +119,148 @@ const StockGraph = ({ stock, onClose }) => {
     });
     ctx.stroke();
 
+    // Draw the end point
     const lastPoint = data[data.length - 1];
     const currentX = lastPoint.x * scaleX;
     const currentY = height - ((lastPoint.y - minY + padding) * scaleY);
     
-    ctx.strokeStyle = chartColor;
-    ctx.lineWidth = 2;
-    ctx.fillStyle = getComputedStyle(canvas).getPropertyValue('--card-bg');
-    
+    ctx.fillStyle = chartColor;
     ctx.beginPath();
-    ctx.arc(currentX, currentY, 4, 0, 2 * Math.PI);
+    ctx.arc(currentX, currentY, Math.max(2, Math.min(4, width / 100)), 0, 2 * Math.PI);
     ctx.fill();
-    ctx.stroke();
-  }, [stock, generateMarketData]);
+  }, [stock, generateMarketData, canvasReady]);
 
   const handleResize = useCallback(() => {
+    // Debounce resize events
+    const timeoutId = setTimeout(() => {
     drawChart();
+    }, 100);
+    return () => clearTimeout(timeoutId);
   }, [drawChart]);
 
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      if (onClose) onClose();
+    }, 300);
+  };
+
+  // Initialize canvas when component mounts
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setCanvasReady(true);
+    }
+  }, []);
+
+  // Draw chart when canvas is ready or stock changes
+  useEffect(() => {
+    if (canvasReady && stock) {
+      // Small delay to ensure DOM is ready
+      const timeoutId = setTimeout(() => {
     drawChart();
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [canvasReady, stock, drawChart]);
+
+  // Handle resize events
+  useEffect(() => {
+    if (canvasReady) {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [drawChart, handleResize]);
+    }
+  }, [handleResize, canvasReady]);
 
   if (!stock) return null;
 
   const isPositive = stock.change >= 0;
 
-  return (
-    <AnimatePresence>
-      <motion.div
-        className="stock-graph-overlay"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-      >
-        <motion.div
-          className="stock-graph-container"
-          initial={{ scale: 0.9, y: 20, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.9, y: 20, opacity: 0 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="graph-header">
-            <div className="stock-info">
-              <div className="stock-logo">
-                <FaChartLine />
-              </div>
-              <div>
-                <h3>{stock.name}</h3>
-                <p>{stock.symbol}</p>
-              </div>
+  // If floating overlay, render a compact version that floats over the card
+  if (isFloating) {
+    return (
+      <div className={`floating-stock-graph ${isVisible ? 'visible' : 'hidden'}`}>
+        <div className="floating-graph-header">
+          <div className="floating-stock-info">
+            <h4>{stock.name}</h4>
+            <div className="floating-price-info">
+              <span className="floating-price">₹{stock.price.toFixed(2)}</span>
+              <span className={`floating-change ${isPositive ? 'positive' : 'negative'}`}>
+                {isPositive ? '+' : ''}{stock.change.toFixed(2)} ({isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%)
+              </span>
             </div>
-            <button className="close-btn" onClick={onClose}>
+          </div>
+          {showCloseButton && (
+            <button className="floating-close-btn" onClick={handleClose}>
               <FaTimes />
             </button>
-          </div>
+          )}
+        </div>
 
-          <div className="price-display">
-            <div className="current-price">
-              <span className="price">{stock.price.toFixed(2)}</span>
+        <div className="floating-chart-container">
+          <canvas
+            ref={canvasRef}
+            className="floating-stock-chart"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // If inline, render a simplified version without overlay
+  if (isInline) {
+    return (
+      <div className={`inline-stock-graph ${isVisible ? 'visible' : 'hidden'}`}>
+        <div className="inline-chart-container">
+          <canvas
+            ref={canvasRef}
+            className="inline-stock-chart"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Original modal overlay version
+  return (
+    <div className={`stock-graph-overlay ${isVisible ? 'visible' : 'hidden'}`} onClick={handleClose}>
+      <div className="stock-graph-container floating-card" onClick={(e) => e.stopPropagation()}>
+        <div className="graph-header">
+          <div className="stock-info">
+            <div className="stock-logo">
+              <FaChartLine />
             </div>
-            <div className={`price-change ${isPositive ? 'positive' : 'negative'}`}>
-              <span>{isPositive ? '+' : ''}{stock.change.toFixed(2)}</span>
-              <span>({isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%)</span>
-              <span className="time-frame">1D</span>
+            <div>
+              <h3>{stock.name}</h3>
+              <p>{stock.symbol}</p>
             </div>
           </div>
+          <button className="close-btn" onClick={handleClose}>
+            <FaTimes />
+          </button>
+        </div>
 
-          <div className="chart-container">
-            <canvas
-              ref={canvasRef}
-              className="stock-chart"
-            />
+        <div className="price-display">
+          <div className="current-price">
+            <span className="price">{stock.price.toFixed(2)}</span>
           </div>
+          <div className={`price-change ${isPositive ? 'positive' : 'negative'}`}>
+            <span>{isPositive ? '+' : ''}{stock.change.toFixed(2)}</span>
+            <span>({isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%)</span>
+            <span className="time-frame">1D</span>
+          </div>
+        </div>
 
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        <div className="chart-container">
+          <canvas
+            ref={canvasRef}
+            className="stock-chart"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

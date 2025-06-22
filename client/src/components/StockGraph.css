@@ -1,14 +1,17 @@
+/* Base Graph Styles */
 .stock-graph-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .stock-graph-container {
@@ -16,7 +19,7 @@
   border-radius: 16px;
   padding: 24px;
   max-width: 600px;
-  width: 90%;
+  width: 100%;
   border: 1px solid #e0e0e0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   color: #1a1a1a;
@@ -133,47 +136,286 @@
 .chart-container {
   position: relative;
   height: 250px;
+  width: 100%;
 }
 
 .stock-chart {
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Inline Graph Styles */
+.inline-stock-graph {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
-.chart-labels {
+.inline-chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+.inline-stock-chart {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Floating Graph Styles */
+.floating-stock-graph {
+  position: relative;
+  width: 100%;
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  overflow: hidden;
+}
+
+.floating-graph-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--text-secondary, #a0a0a0);
+  align-items: flex-start;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
 }
 
-.graph-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color, #333);
+.floating-stock-info h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
 }
 
-.chart-info {
+.floating-price-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25rem;
 }
 
-.chart-info span:first-child {
-  font-size: 14px;
-  color: var(--text-primary, #e0e0e0);
+.floating-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.floating-change {
+  font-size: 0.875rem;
   font-weight: 500;
 }
 
-.data-source {
+.floating-change.positive {
+  color: #00c853;
+}
+
+.floating-change.negative {
+  color: #ff5252;
+}
+
+.floating-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #888);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.floating-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.floating-chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  min-height: 200px;
+}
+
+.floating-stock-chart {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stock-graph-overlay {
+    padding: 0.5rem;
+  }
+
+  .stock-graph-container {
+    padding: 16px;
+    width: 100%;
+    max-width: none;
+  }
+  
+  .stock-info h3 { 
+    font-size: 20px; 
+  }
+  
+  .price { 
+    font-size: 24px; 
+  }
+  
+  .price-change { 
+    font-size: 14px; 
+  }
+  
+  .chart-container { 
+    height: 200px; 
+  }
+  
+  .graph-header {
+    margin-bottom: 16px;
+  }
+  
+  .stock-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .floating-chart-container {
+    height: 250px;
+  }
+
+  .inline-chart-container {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stock-graph-container {
+    padding: 12px;
+  }
+
+  .stock-info h3 { 
+    font-size: 18px; 
+  }
+  
+  .price { 
+    font-size: 22px; 
+  }
+  
+  .price-change { 
+    font-size: 13px; 
+    gap: 6px; 
+  }
+  
+  .chart-container { 
+    height: 180px; 
+  }
+  
+  .graph-header {
+    margin-bottom: 12px;
+  }
+  
+  .stock-logo {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .stock-info p {
   font-size: 12px;
-  color: var(--text-secondary, #a0a0a0);
+  }
+
+  .floating-chart-container {
+    height: 200px;
+  }
+
+  .inline-chart-container {
+    min-height: 150px;
+  }
+
+  .floating-graph-header {
+    padding: 0.75rem;
+  }
+
+  .floating-stock-info h4 {
+    font-size: 1rem;
+  }
+
+  .floating-price {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .stock-graph-container {
+    padding: 12px;
+  }
+  
+  .price-display {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .chart-container {
+    height: 150px;
+  }
+
+  .floating-chart-container {
+    height: 180px;
+  }
+
+  .inline-chart-container {
+    min-height: 120px;
+  }
+}
+
+/* Animation classes */
+.visible {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.3s ease;
+}
+
+.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+/* Ensure canvas elements are properly sized */
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Dark mode adjustments */
+.dark .floating-stock-graph {
+  background: var(--card-bg, #1a1a1a);
+  border-color: var(--border-color, #333);
+}
+
+.dark .floating-stock-info h4 {
+  color: var(--text-primary, #e0e0e0);
+}
+
+.dark .floating-price {
+  color: var(--text-primary, #e0e0e0);
+}
+
+.dark .floating-change.positive {
+  color: #00c853;
+}
+
+.dark .floating-change.negative {
+  color: #ff5252;
 }
 
 /* Responsive Design */

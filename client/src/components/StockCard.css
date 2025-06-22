@@ -8,6 +8,9 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
 }
 
 .stock-card.major {
@@ -43,9 +46,10 @@
 
 .card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 16px;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .stock-logo {
@@ -72,6 +76,7 @@
 .stock-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .stock-name {
@@ -79,7 +84,13 @@
   font-weight: 600;
   color: #2c3e50;
   margin: 0 0 4px 0;
-  white-space: nowrap;
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -89,10 +100,14 @@
   color: #6c757d;
   margin: 0;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stock-type {
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .type-badge {
@@ -102,6 +117,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .type-badge.major {
@@ -115,6 +131,10 @@
 }
 
 .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 
@@ -123,12 +143,14 @@
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 12px;
+  gap: 8px;
 }
 
 .current-price {
   display: flex;
   align-items: baseline;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .currency {
@@ -150,6 +172,8 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .change-section.success {
@@ -166,12 +190,14 @@
   gap: 4px;
   font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .change-percent {
   font-size: 12px;
   font-weight: 500;
   opacity: 0.8;
+  white-space: nowrap;
 }
 
 .card-footer {
@@ -180,10 +206,15 @@
   align-items: center;
   font-size: 11px;
   color: #6c757d;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .previous-close {
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .source-badge {
@@ -194,6 +225,8 @@
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .card-bg-gradient {
@@ -209,52 +242,28 @@
 }
 
 .card-bg-gradient.success {
-  background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(30, 126, 52, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(30, 126, 52, 0.05) 100%);
 }
 
 .card-bg-gradient.danger {
-  background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(200, 35, 51, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(200, 35, 51, 0.05) 100%);
 }
 
 .stock-card:hover .card-bg-gradient {
   opacity: 1;
 }
 
-/* Click indicator */
-.click-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 10;
-  backdrop-filter: blur(4px);
+/* Stock Card Wrapper */
+.stock-card-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
-.stock-card:hover .click-indicator {
-  opacity: 1;
-}
-
-.click-indicator i {
-  font-size: 14px;
-}
-
-/* Mobile Responsive */
 @media (max-width: 768px) {
   .stock-card {
     padding: 16px;
-    border-radius: 12px;
+    min-height: 160px;
   }
 
   .card-header {
@@ -270,6 +279,7 @@
 
   .stock-name {
     font-size: 14px;
+    -webkit-line-clamp: 2;
   }
 
   .stock-symbol {
@@ -293,28 +303,19 @@
   }
 
   .type-badge {
-    padding: 3px 6px;
     font-size: 9px;
+    padding: 3px 6px;
   }
 
   .source-badge {
-    padding: 1px 4px;
     font-size: 9px;
-  }
-  
-  .click-indicator {
-    padding: 6px 10px;
-    font-size: 11px;
-  }
-  
-  .click-indicator i {
-    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .stock-card {
     padding: 12px;
+    min-height: 140px;
   }
 
   .stock-logo {
@@ -325,6 +326,7 @@
 
   .stock-name {
     font-size: 13px;
+    -webkit-line-clamp: 2;
   }
 
   .price {
@@ -338,7 +340,7 @@
   .price-section {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
 
   .change-section {
@@ -346,20 +348,17 @@
     text-align: left;
   }
   
-  .click-indicator {
-    padding: 5px 8px;
-    font-size: 10px;
-  }
-  
-  .click-indicator i {
-    font-size: 11px;
+  .card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
 
-/* Landscape mobile optimizations */
 @media (max-width: 768px) and (orientation: landscape) {
   .stock-card {
     padding: 14px;
+    min-height: 120px;
   }
 
   .card-header {
@@ -375,6 +374,7 @@
 
   .stock-name {
     font-size: 12px;
+    -webkit-line-clamp: 1;
   }
 
   .price {
@@ -386,10 +386,9 @@
   }
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .stock-card {
-    border-width: 2px;
+    border: 2px solid #ffffff;
   }
 
   .type-badge {
@@ -397,13 +396,12 @@
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .stock-card {
     transition: none;
   }
 
   .stock-card:hover .card-bg-gradient {
-    transition: none;
+    animation: none;
   }
 } 
