@@ -61,7 +61,7 @@ A modern, responsive Indian stock market tracking application built with React.j
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js (v16 or higher)
+- Node.js (v18 or higher)
 - npm or yarn
 
 ### Setup Instructions
@@ -74,22 +74,42 @@ A modern, responsive Indian stock market tracking application built with React.j
 
 2. **Install dependencies**
    ```bash
-   # Install client dependencies
-   cd client
+   # Install all dependencies (root + client)
+   npm run setup
+   
+   # Or install manually:
    npm install
+   cd client && npm install
    cd ..
    ```
 
 3. **Start the application**
    ```bash
-   # Start the React development server
+   # Start development server
+   npm run dev
+   
+   # Or start directly:
    npm start
-   # or
-   cd client && npm start
    ```
 
 4. **Access the application**
-   - Frontend: http://localhost:3000
+   - Frontend: http://localhost:3000 (or 3001 if 3000 is busy)
+
+## 🚀 Quick Start Commands
+
+```bash
+# First time setup
+npm run setup
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Install client dependencies only
+npm run install-client
+```
 
 ## 📱 Application Structure
 
@@ -134,7 +154,6 @@ The application uses **simulated data** generated locally:
 
 ### Build for Production
 ```bash
-cd client
 npm run build
 ```
 
@@ -158,10 +177,11 @@ The built application can be deployed to any static hosting service:
 ## 🔧 Development
 
 ### Available Scripts
-- `npm start` - Start development server
+- `npm run dev` - Start development server
+- `npm start` - Start development server (alias)
 - `npm run build` - Build for production
-- `npm test` - Run tests
-- `npm run eject` - Eject from Create React App
+- `npm run setup` - Install all dependencies
+- `npm run install-client` - Install client dependencies only
 
 ### Adding Real Data
 To integrate real stock data, you can:
