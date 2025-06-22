@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import StockCard from '../components/StockCard';
 import './MarketOverviewPage.css';
 
@@ -158,10 +159,10 @@ const MarketOverviewPage = ({ marketData }) => {
         <h2 className="section-title floating-enhanced">Want to See Detailed Charts?</h2>
         <p>Visit our dedicated graphs page to view interactive charts for all indexes</p>
         <div className="cta-buttons">
-          <a href="/graphs" className="cta-button primary">
+          <Link to="/graphs" className="cta-button primary">
             <i className="fas fa-chart-area"></i>
             View Index Graphs
-          </a>
+          </Link>
         </div>
       </div>
 

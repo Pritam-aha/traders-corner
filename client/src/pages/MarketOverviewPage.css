@@ -308,7 +308,13 @@
   
   .cta-button {
     width: 100%;
-    padding: 12px 20px;
+    max-width: 300px;
+    justify-content: center;
+    min-height: 48px;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -663,6 +669,11 @@
   text-decoration: none;
 }
 
+.cta-button.primary:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
 .cta-button.primary i {
   font-size: 1.2rem;
 }
@@ -798,6 +809,16 @@
 
   .cta-section h2 {
     font-size: 1.3rem;
+  }
+
+  .cta-section p {
+    font-size: 0.9rem;
+  }
+
+  .cta-button {
+    min-height: 44px; /* Slightly smaller for very small screens */
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
   }
 }
 

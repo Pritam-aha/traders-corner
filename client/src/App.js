@@ -176,6 +176,7 @@ function App() {
           <Route path="/market-status" element={<MarketStatusPage marketData={marketData} />} />
           <Route path="/statistics" element={<StatisticsPage marketData={marketData} />} />
           <Route path="/about" element={<AboutUsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
